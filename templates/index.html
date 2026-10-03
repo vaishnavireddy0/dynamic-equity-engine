@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Equity Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 35px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); width: 480px; border: 1px solid #334155; box-sizing: border-box; }
+        .brand-header { text-align: center; margin-bottom: 25px; }
+        .brand-header h1 { margin: 0; color: #38bdf8; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        .brand-header p { margin: 5px 0 0 0; color: #94a3b8; font-size: 13px; }
+        .member { margin: 15px 0; padding: 12px; background: #334155; border-radius: 8px; }
+        .info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
+        .right-group { display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg { background: #1e293b; border-radius: 6px; height: 8px; width: 100%; overflow: hidden; margin-top: 8px; }
+        .progress-bar-fill { background: linear-gradient(90deg, #38bdf8, #818cf8); height: 100%; border-radius: 6px; transition: width 0.4s ease; }
+        .sync-btn { background: #10b981; color: white; margin-bottom: 15px; width: 100%; padding: 10px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer; font-size: 14px; box-sizing: border-box; }
+        .sync-btn:hover { background: #059669; }
+        .delete-btn { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; width: auto; margin: 0; }
+        .delete-btn:hover { background: #dc2626; }
+        form.add-form { border-top: 1px solid #475569; padding-top: 20px; margin-top: 20px; }
+        form.add-form h3 { margin: 0 0 10px 0; font-size: 15px; color: #f8fafc; }
+        .text-input { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; font-size: 14px; }
+        .submit-btn { width: 100%; padding: 10px; margin: 6px 0; border-radius: 6px; border: none; background: #38bdf8; color: #0f172a; font-weight: bold; cursor: pointer; box-sizing: border-box; font-size: 14px; }
+        .submit-btn:hover { background: #0ea5e9; }
+        .footer { text-align: center; margin-top: 25px; font-size: 11px; color: #64748b; border-top: 1px solid #334155; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="brand-header">
+            <h1>⚖️ Dynamic Equity Engine</h1>
+            <p>Transparent Contribution & Attribution Platform</p>
+        </div>
+        
+        <form method="POST">
+            <input type="hidden" name="action" value="sync_git">
+            <button type="submit" class="sync-btn">🔄 Sync Real Git Commits</button>
+        </form>
+
+        {% for item in breakdown %}
+        <div class="member">
+            <div class="info">
+                <span><strong>{{ item.name }}</strong></span>
+                <div class="right-group">
+                    <span>{{ item.equity }}% <small style="color: #94a3b8;">({{ item.score }} pts)</small></span>
+                    <form method="POST" style="margin:0; display:inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="name" value="{{ item.name }}">
+                        <button type="submit" class="delete-btn" title="Remove Teammate">✕</button>
+                    </form>
+                </div>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: {{ item.equity }}%;"></div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <form method="POST" class="add-form">
+            <input type="hidden" name="action" value="manual_add">
+            <h3>Add / Update Teammate</h3>
+            <input type="text" class="text-input" name="name" placeholder="Teammate Name" required>
+            <input type="number" class="text-input" name="commits" placeholder="Commits count" required>
+            <input type="number" class="text-input" name="pull_requests" placeholder="Pull Requests count" required>
+            <input type="number" class="text-input" name="tasks_completed" placeholder="Tasks completed" required>
+            <button type="submit" class="submit-btn">Save Contribution Stats</button>
+        </form>
+
+        <div class="footer">
+            Dynamic Equity Engine v1.0 • Running Locally on Flask & Git
+        </div>
+    </div>
+</body>
+</html>
